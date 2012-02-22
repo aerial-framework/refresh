@@ -1,6 +1,0 @@
-[submodule "lib/servers/rest/slim"]
-	path = lib/servers/rest/slim
-	url = git@github.com:dannykopping/Slim.git
-[submodule "lib/servers/rest/slim-plugins"]
-	path = lib/servers/rest/slim-plugins
-	url = git@github.com:dannykopping/Slim-Extras.git
