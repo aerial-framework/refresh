@@ -7,7 +7,7 @@
      *
      * @see /projectroot/www
      */
-    define("WWW_PATH", dirname(__FILE__));
+    define("WWW_PATH", dirname(__FILE__)."/../www");
 
     /**
      * The path to the Aerial library folder
