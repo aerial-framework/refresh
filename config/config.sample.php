@@ -1,7 +1,5 @@
 <?php
 
-    xdebug_disable();
-
     /**
      * The path to the Aerial www folder
      *
@@ -24,7 +22,7 @@
     define("DB_ENGINE", "mysql");
     define("DB_HOST", "localhost");
     define("DB_SCHEMA", "");
-    define("DB_USERNAME", "aerial");
+    define("DB_USERNAME", "");
     define("DB_PASSWORD", "");
     define("DB_PORT", "3306");
 
