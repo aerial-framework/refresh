@@ -33,7 +33,7 @@
                 throw new Exception("RESTController could not be initialized with an empty Slim instance");
 
             // set debug mode to the Aerial DEBUG_MODE setting
-            $app->config('debug', DEBUG_MODE);
+            $app->config('debug', Configuration::get("DEBUG_MODE"));
 
             // define a custom router function
             $app->customRouter(array($this, "router"));
@@ -89,16 +89,6 @@
                 return false;
 
             $result = call_user_func_array($callable, $data);
-
-            //
-            //
-            //
-            //
-            // ADD CUSTOM CONTENT TYPE NEGOTIATION HERE??
-            //
-            //
-            //
-            //
 
             $app->contentType("application/json");
             $app->response()->header("Access-Control-Allow-Origin", "*");
@@ -196,7 +186,7 @@
                 return array("message" => "Hello World");
             });
 
-            if(DEBUG_MODE)
+            if(Configuration::get("DEBUG_MODE"))
             {
                 // TODO: Add more status info here
                 $app->get("/status", function()

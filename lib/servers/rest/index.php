@@ -3,7 +3,7 @@
 
     require_once dirname(__FILE__)."/slim/Slim/Slim.php";
     require_once dirname(__FILE__)."/RESTController.php";
-    require_once LIBRARY_PATH."/aerialframework/core/Configuration.php";
+    import("aerialframework.core.AerialConfiguration");
 
     $app = new Slim();
 
@@ -19,11 +19,11 @@
 
         // if an operation has an "@authorize debug" annotation,
         // and DEBUG MODE is enabled, allow
-        return DEBUG_MODE === true && in_array("debug", $roles);
+        return Configuration::get("DEBUG_MODE") === true && in_array("debug", $roles);
     });
 
     // auto-routing must always be declared AFTER authorization callback
-    $controller->addAutoRouting(array(new Configuration()));
+    $controller->addAutoRouting(array(new AerialConfiguration()));
 
     // run Slim!
     $app->run();

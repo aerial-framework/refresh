@@ -4,7 +4,7 @@
 	 *
 	 * @author Danny Kopping
 	 */
-	class Configuration
+	class AerialConfiguration
 	{
 		private static $_instance;
 	
