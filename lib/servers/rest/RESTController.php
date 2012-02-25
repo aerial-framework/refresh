@@ -27,13 +27,14 @@
         {
             $app = $this->getApp();
 
-            $app->add("Deserializer");
-
             if(empty($app))
                 throw new Exception("RESTController could not be initialized with an empty Slim instance");
 
             // set debug mode to the Aerial DEBUG_MODE setting
             $app->config('debug', Configuration::get("DEBUG_MODE"));
+
+            // add Slim middleware to deserialize HTTP request body data
+            $this->addRequestBodyDeserializer();
 
             // define a custom router function
             $app->customRouter(array($this, "router"));
@@ -75,6 +76,13 @@
         public function getApp()
         {
             return $this->_slimInstance;
+        }
+
+        private function addRequestBodyDeserializer()
+        {
+            $app = $this->getApp();
+
+            $app->add("Deserializer");
         }
 
         public function router($callable, $route, $params)
