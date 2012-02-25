@@ -19,6 +19,16 @@
      */
     Configuration::set("DEBUG_MODE", true);
 
+    /**
+     * The default encoding of the response data
+     */
+    Configuration::set("DEFAULT_CONTENT_TYPE", "application/json");
+
+    /**
+     * GZIP compression of output data
+     */
+    Configuration::set("GZIP_ENABLED", false);
+
     Configuration::set("DB_ENGINE", "mysql");
     Configuration::set("DB_HOST", "localhost");
     Configuration::set("DB_SCHEMA", "");

@@ -68,7 +68,8 @@
             $this->_slimInstance = $slimInstance;
 
             // load in some required files
-            require_once dirname(__FILE__)."/utils/Deserializer.php";
+            require_once dirname(__FILE__) . "/utils/Deserializer.php";
+            require_once dirname(__FILE__) . "/utils/Serializer.php";
 
             $this->initialize();
         }
@@ -101,19 +102,15 @@
 
             $result = call_user_func_array($callable, $data);
 
-            $app->contentType("application/json");
-            $app->response()->header("Access-Control-Allow-Origin", "*");
-
-            if(!$result && $result !== false)
+            // if there is no response data, return a blank response
+            if($result === null && $result !== false)
                 return true;
 
-            if(is_a($result, "Aerial_Record") || is_a($result, "Doctrine_Collection"))
-                $data = json_encode($result->toArray());
-            else
-                $data = json_encode($result);
+            $data = $this->getSerializedData($result);
 
             // return gzip-encoded data
-            if(substr_count($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip") && extension_loaded("zlib"))
+            $gzipEnabled = Configuration::get("GZIP_ENABLED");
+            if(substr_count($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip") && extension_loaded("zlib") && $gzipEnabled)
             {
                 $app->response()->header("Content-Encoding", "gzip");
                 $app->response()->header("Vary", "Accept-Encoding");
@@ -194,7 +191,7 @@
 
             $app->get("/", function()
             {
-                return array("message" => "Hello World");
+                return array("message" => "Hello World from Aerial Framework");
             });
 
             if(DEBUG_MODE)
@@ -205,5 +202,33 @@
                     return array("status" => "operational");
                 });
             }
+        }
+
+        private function getSerializedData($rawResponse)
+        {
+            $app = $this->getApp();
+
+            $env = $app->environment();
+            $acceptableContentTypes = explode(";", $env["ACCEPT"]);
+
+            $contentType = "";
+
+            if(count($acceptableContentTypes) > 1 || empty($acceptableContentTypes))
+                $contentType = Configuration::get("DEFAULT_CONTENT_TYPE");
+            else
+                $contentType = $acceptableContentTypes[0];
+
+            // don't allow */* as the content-type, rather favour the default content-type
+            if($contentType == "*/*")
+                $contentType = Configuration::get("DEFAULT_CONTENT_TYPE");
+
+            $app->contentType($contentType);
+
+            if(is_a($rawResponse, "Aerial_Record") || is_a($rawResponse, "Doctrine_Collection"))
+                $rawResponse = $rawResponse->toArray();
+
+            $data = Serializer::serialize($rawResponse, $contentType);
+
+            return $data;
         }
     }

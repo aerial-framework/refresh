@@ -1,6 +1,10 @@
 <?php
     require_once(dirname(__FILE__) . "/middleware/DeserializerMiddleware.php");
 
+    require_once(dirname(__FILE__) . "/deserializer/JSONDeserializer.php");
+    require_once(dirname(__FILE__) . "/deserializer/XMLDeserializer.php");
+    require_once(dirname(__FILE__) . "/deserializer/CSVDeserializer.php");
+
     class Deserializer extends DeserializerMiddleware
     {
         public function __construct($app, $settings = array())
@@ -8,10 +12,10 @@
             parent::__construct($app, $settings);
 
             $this->contentTypes = array_merge(array(
-                                                   'application/json' => array($this, 'parseJson'),
-                                                   'application/xml'  => array($this, 'parseXml'),
-                                                   'text/xml'         => array($this, 'parseXml'),
-                                                   'text/csv'         => array($this, 'parseCsv')
+                                                   'application/json' => "JSONDeserializer",
+                                                   'application/xml'  => "XMLDeserializer",
+                                                   'text/xml'         => "XMLDeserializer",
+                                                   'text/csv'         => "CSVDeserializer"
                                               ), $settings);
         }
 
@@ -22,93 +26,32 @@
          * This method will attempt to parse the request body
          * based on its content type if available.
          *
-         * @param   string $input
+         * @param   string $data
          * @param   string $contentType
          * @return  mixed
          */
-        protected function parse($input, $contentType)
+        protected function parse($data, $contentType)
         {
-            if(isset($this->contentTypes[$contentType]) && is_callable($this->contentTypes[$contentType]))
+            if(empty($data))
+                return $data;
+
+            $defaultContentType = Configuration::get("DEFAULT_CONTENT_TYPE");
+            $deserializer = $this->contentTypes[$contentType];
+            if(!isset($deserializer))
+                $deserializer = $this->contentTypes[$defaultContentType];
+
+            if(!$deserializer)
+                throw new Exception("Cannot find deserializer for default content type \"" . $defaultContentType . "\"");
+
+            if(class_exists($deserializer))
             {
-                $result = call_user_func($this->contentTypes[$contentType], $input);
-                if($result)
-                {
+                $result = call_user_func(array($deserializer, "parse"), $data);
+                if(!empty($result))
                     return $result;
-                }
             }
-            return $input;
+            else
+                throw new Exception("Cannot find deserializer type \"" . $deserializer . "\"");
+
+            return $data;
         }
-
-        /**
-         * Parse JSON
-         *
-         * This method converts the raw JSON input
-         * into an associative array.
-         *
-         * @param   string $input
-         * @return  array|string
-         */
-        protected function parseJson($input)
-        {
-            if(function_exists('json_decode'))
-            {
-                return json_decode($input);
-            } else
-            {
-                return $input;
-            }
-        }
-
-        /**
-         * Parse XML
-         *
-         * This method creates a SimpleXMLElement
-         * based upon the XML input. If the SimpleXML
-         * extension is not available, the raw input
-         * will be returned unchanged.
-         *
-         * @param   string $input
-         * @return  SimpleXMLElement|string
-         */
-        protected function parseXml($input)
-        {
-            if(class_exists('SimpleXMLElement'))
-            {
-                try
-                {
-                    // read XML, merge CDATA elements into text nodes
-                    $xml = new SimpleXMLElement($input, LIBXML_NOCDATA);
-
-                    return (object) ((array) $xml);
-                } catch(Exception $e)
-                {
-                    throw new Exception("Unable to parse input data as XML.<br/>".$e->getMessage());
-                }
-            }
-            return $input;
-        }
-
-        /**
-         * Parse CSV
-         *
-         * This method parses CSV content into a numeric array
-         * containing an array of data for each CSV line.
-         *
-         * @param   string $input
-         * @return  array
-         */
-        protected function parseCsv($input)
-        {
-            $temp = fopen('php://memory', 'rw');
-            fwrite($temp, $input);
-            fseek($temp, 0);
-            $res = array();
-            while(($data = fgetcsv($temp)) !== false)
-            {
-                $res[] = $data;
-            }
-            fclose($temp);
-            return $res;
-        }
-
     }
