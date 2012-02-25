@@ -79,7 +79,7 @@
                     // read XML, merge CDATA elements into text nodes
                     $xml = new SimpleXMLElement($input, LIBXML_NOCDATA);
 
-                    return json_encode((object) ((array) $xml));
+                    return (object) ((array) $xml);
                 } catch(Exception $e)
                 {
                     throw new Exception("Unable to parse input data as XML.<br/>".$e->getMessage());
