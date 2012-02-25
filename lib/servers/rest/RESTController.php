@@ -27,7 +27,7 @@
         {
             $app = $this->getApp();
 
-            $app->add("Slim_Middleware_ContentTypes");
+            $app->add("Deserializer");
 
             if(empty($app))
                 throw new Exception("RESTController could not be initialized with an empty Slim instance");
@@ -65,6 +65,9 @@
         public function setApp(Slim $slimInstance)
         {
             $this->_slimInstance = $slimInstance;
+
+            // load in some required files
+            require_once dirname(__FILE__)."/utils/Deserializer.php";
 
             $this->initialize();
         }
@@ -186,7 +189,7 @@
                 return array("message" => "Hello World");
             });
 
-            if(Configuration::get("DEBUG_MODE"))
+            if(DEBUG_MODE)
             {
                 // TODO: Add more status info here
                 $app->get("/status", function()
