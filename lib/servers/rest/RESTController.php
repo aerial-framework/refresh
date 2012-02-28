@@ -45,6 +45,7 @@
             // define a 404 handling function
             $app->notFound(array($this, "notFoundHandler"));
 
+            // add default Aerial operations
             $this->addDefaultOperations();
         }
 
@@ -89,13 +90,20 @@
         public function router($callable, $route, $params)
         {
             $app = $this->getApp();
+            $env = $app->environment();
 
-            $data = null;
+            $data = array();
 
             if(in_array("PUT", $route->getHttpMethods()) || in_array("POST", $route->getHttpMethods()))
                 $data = array($app->request()->getBody());
             else
                 $data = $params;
+
+            if(!empty($env["QUERY_STRING"]))
+            {
+                parse_str($env["QUERY_STRING"], $query);
+                $data = array_merge($data, $query);
+            }
 
             if(!is_callable($callable))
                 return false;
@@ -132,7 +140,8 @@
             $app->halt(500, json_encode(array(
                                              "error" => array(
                                                  "message" => $e->getMessage(),
-                                                 "code"    => $e->getCode()
+                                                 "code"    => $e->getCode(),
+                                                 "file"    => $e->getFile(),
                                              )
                                         )));
         }
@@ -194,13 +203,17 @@
                 return array("message" => "Hello World from Aerial Framework");
             });
 
-            if(DEBUG_MODE)
+            if(Configuration::get("DEBUG_MODE"))
             {
                 // TODO: Add more status info here
                 $app->get("/status", function()
                 {
                     return array("status" => "operational");
                 });
+
+                // add internal Aerial operations
+                require_once Configuration::get("LIBRARY_PATH")."/aerialframework/core/CodeGeneration.php";
+                $this->addAutoRouting(array(new CodeGeneration()));
             }
         }
 
