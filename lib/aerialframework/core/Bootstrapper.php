@@ -36,6 +36,8 @@
             $this->manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
             $this->manager->setAttribute(Doctrine_Core::ATTR_AUTOLOAD_TABLE_CLASSES, true);
 
+            $this->manager->setAttribute(Doctrine_Core::ATTR_TABLE_CLASS, "Aerial_Table");
+
             $this->setCustomConnections();
 
             $connectionString =
