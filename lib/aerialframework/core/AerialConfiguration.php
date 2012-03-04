@@ -48,7 +48,16 @@
          */
         public function getYAMLFromDatabase()
         {
-            return Aerial_Core::generateYamlFromDb(WWW_PATH);
+//            return Aerial_Core::generateYamlFromDb(WWW_PATH);
+            $modelsPath = Configuration::get("PHP_MODELS");
+
+            $options = array(
+            				"baseClassName" => "Aerial_Record",
+            				"baseClassesDirectory" => "base"
+                );
+
+            $dataToWrite = Aerial_Core::generateModelsFromDb($modelsPath, array("doctrine"), $options);
+            return $dataToWrite;
         }
 
 		public function getDefinitionsFromYAML($packageName="org.aerialframework.vo")
