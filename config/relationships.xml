@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema>
+
+    <mn joinTable="UserGroup">         
+        <table fk="userId">User</table>         
+        <table fk="groupId" alias="SomeGroup">Group</table>
+    </mn>
+
+    <!-- This many to many also suffices this diamond pattern.
+
+           |   -BillAddress-   |
+           |					|
+      User -					- Address
+           |					|
+           | -ShippingAddress- |
+    -->
+
+    <!--<mn joinTable="BillAddress">
+       <table fk="userId" alias="Person">User</table>
+       <table fk="addressId" alias="BillingAddress">Address</table>
+     </mn>
+
+     <mn table="ShipAddress">
+         <fk alias="Person">userId</fk>
+         <fk alias="ShippingAddress">addressId</fk>
+     </mn>-->
+
+
+    <!-- 	Self Referencing -->
+    <!--<self table="User">
+         <fk alias="Father">id</fk>
+         <fk alias="Son">userId</fk>
+     </self>-->
+
+
+    <!-- 	One-to-One -->
+    <!--<one>
+         <table name="Product">
+             <fk alias="DefaultImage">defaultProductImageId</fk>
+         </table>
+         <table name="ProductImage">
+             <fk>id</fk>
+         </table>
+     </one>-->
+
+</schema>
