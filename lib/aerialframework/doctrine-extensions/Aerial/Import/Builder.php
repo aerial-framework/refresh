@@ -382,7 +382,23 @@ class Aerial_Import_Builder extends Doctrine_Import_Builder
 
         $code .= PHP_EOL . $definitionCode;
 
-        return array("path" => $writePath, "file" => $code);
+        if(isset($definition['generate_once']) && $definition['generate_once'] === true)
+        {
+            if(!file_exists($writePath))
+            {
+                $bytes = file_put_contents($writePath, $code);
+            }
+        } else
+        {
+            $bytes = file_put_contents($writePath, $code);
+        }
+
+        if(isset($bytes) && $bytes === false)
+        {
+            throw new Doctrine_Import_Builder_Exception("Couldn't write file " . $writePath);
+        }
+
+        Doctrine_Core::loadModel($definition['className'], $writePath);
     }
 
     /*
