@@ -135,13 +135,13 @@
             $app = $this->getApp();
 
             $app->contentType("application/json");
-            $app->response()->header("Access-Control-Allow-Origin", "*");
 
             $app->halt(500, json_encode(array(
                                              "error" => array(
                                                  "message" => $e->getMessage(),
                                                  "code"    => $e->getCode(),
                                                  "file"    => $e->getFile(),
+                                                 "line"    => $e->getLine(),
                                              )
                                         )));
         }
