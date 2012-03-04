@@ -2,7 +2,6 @@
 
     import('doctrine.Doctrine');
     import('aerialframework.doctrine-extensions.Aerial');
-    import('aerialframework.core.Authentication');
     import('aerialframework.utils.ModelMapper');
     import('aerialframework.utils.Date');
     import('aerialframework.utils.firephp.fb');
@@ -38,8 +37,6 @@
 
             $this->manager->setAttribute(Doctrine_Core::ATTR_TABLE_CLASS, "Aerial_Table");
 
-            $this->setCustomConnections();
-
             $connectionString =
                 Configuration::get("DB_ENGINE") . "://" .
                     Configuration::get("DB_USERNAME") . ":" .
@@ -59,10 +56,6 @@
 
             if(realpath(Configuration::get("PHP_MODELS")))
                 Aerial_Core::loadModels(Configuration::get("PHP_MODELS"));
-
-            Authentication::getInstance();
-
-
         }
 
         public static function setCredentials($username, $password)
@@ -83,27 +76,6 @@
                 self::$instance = new $className;
             }
             return self::$instance;
-        }
-
-        /**
-         * Register custom Doctrine connections to catch connection exceptions
-         *
-         * @static
-         * @return void
-         */
-        private function setCustomConnections()
-        {
-            $this->manager->registerConnectionDriver('sqlite', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('sqlite2', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('sqlite3', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('dblib', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('mysql', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('oci8', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('oci', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('pgsql', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('odbc', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('mock', 'Aerial_Connection');
-            $this->manager->registerConnectionDriver('oracle', 'Aerial_Connection');
         }
     }
 
