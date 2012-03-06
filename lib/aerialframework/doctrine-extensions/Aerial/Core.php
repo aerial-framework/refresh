@@ -6,6 +6,12 @@
         const HYDRATE_AMF_ARRAY = "Aerial_Hydrator_ArrayDriver";
         const HYDRATE_AMF_COLLECTION = "Aerial_Hydrator_CollectionDriver";
 
+        /**
+         * if set, to true, the Aerial YAML code generation will maintain column naming conventions
+         * Doctrine, by default, lower-cases all column names when exporting YAML from a database schema
+         */
+        const ATTR_YAML_MAINTAIN_COLUMN_NAMES           = 200;
+
         private static $_path;
 
         /**

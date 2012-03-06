@@ -7,7 +7,7 @@
          *
          * This method does not alter the database table; @see export();
          *
-         * @see $_columns;
+         * @see                                                $_columns;
          * @param string $name      column physical name
          * @param string $type      type of data
          * @param integer $length   maximum length
@@ -19,13 +19,19 @@
          */
         public function setColumn($name, $type = null, $length = null, $options = array(), $prepend = false)
         {
-            if (is_string($options)) {
+            $maintainNames = $this->getConnection()->getAttribute(Aerial_Core::ATTR_YAML_MAINTAIN_COLUMN_NAMES);
+
+            if(is_string($options))
+            {
                 $options = explode('|', $options);
             }
 
-            foreach ($options as $k => $option) {
-                if (is_numeric($k)) {
-                    if ( ! empty($option)) {
+            foreach($options as $k => $option)
+            {
+                if(is_numeric($k))
+                {
+                    if(!empty($option))
+                    {
                         $options[$option] = true;
                     }
                     unset($options[$k]);
@@ -33,50 +39,63 @@
             }
 
             // extract column name & field name
-            if (stripos($name, ' as '))
+            if(stripos($name, ' as '))
             {
-                if (strpos($name, ' as ')) {
+                if(strpos($name, ' as '))
+                {
                     $parts = explode(' as ', $name);
-                } else {
+                } else
+                {
                     $parts = explode(' AS ', $name);
                 }
 
-                if (count($parts) > 1) {
+                if(count($parts) > 1)
+                {
                     $fieldName = $parts[1];
-                } else {
+                } else
+                {
                     $fieldName = $parts[0];
                 }
 
-                $name = $parts[0];
-            } else {
+                $name = $maintainNames ? $parts[0] : strtolower($parts[0]);
+            } else
+            {
                 $fieldName = $name;
+
+                if(!$maintainNames)
+                    $name = strtolower($name);
             }
 
             $name = trim($name);
             $fieldName = trim($fieldName);
 
-            if ($prepend) {
+            if($prepend)
+            {
                 $this->_columnNames = array_merge(array($fieldName => $name), $this->_columnNames);
                 $this->_fieldNames = array_merge(array($name => $fieldName), $this->_fieldNames);
-            } else {
+            } else
+            {
                 $this->_columnNames[$fieldName] = $name;
                 $this->_fieldNames[$name] = $fieldName;
             }
 
             $defaultOptions = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_COLUMN_OPTIONS);
 
-            if (isset($defaultOptions['length']) && $defaultOptions['length'] && $length == null) {
+            if(isset($defaultOptions['length']) && $defaultOptions['length'] && $length == null)
+            {
                 $length = $defaultOptions['length'];
             }
 
-            if ($length == null) {
-                switch ($type) {
+            if($length == null)
+            {
+                switch($type)
+                {
                     case 'integer':
                         $length = 8;
-                    break;
+                        break;
                     case 'decimal':
                         $length = 18;
-                    break;
+                        break;
                     case 'string':
                     case 'clob':
                     case 'float':
@@ -90,7 +109,7 @@
                         //All the DataDict driver classes have work-arounds to deal
                         //with unset lengths.
                         $length = null;
-                    break;
+                        break;
                     case 'boolean':
                         $length = 1;
                     case 'date':
@@ -108,27 +127,35 @@
             $options['type'] = $type;
             $options['length'] = $length;
 
-            foreach ($defaultOptions as $key => $value) {
-                if ( ! array_key_exists($key, $options) || is_null($options[$key])) {
+            foreach($defaultOptions as $key => $value)
+            {
+                if(!array_key_exists($key, $options) || is_null($options[$key]))
+                {
                     $options[$key] = $value;
                 }
             }
 
-            if ($prepend) {
+            if($prepend)
+            {
                 $this->_columns = array_merge(array($name => $options), $this->_columns);
-            } else {
+            } else
+            {
                 $this->_columns[$name] = $options;
             }
 
-            if (isset($options['primary']) && $options['primary']) {
-                if (isset($this->_identifier)) {
+            if(isset($options['primary']) && $options['primary'])
+            {
+                if(isset($this->_identifier))
+                {
                     $this->_identifier = (array) $this->_identifier;
                 }
-                if ( ! in_array($fieldName, $this->_identifier)) {
+                if(!in_array($fieldName, $this->_identifier))
+                {
                     $this->_identifier[] = $fieldName;
                 }
             }
-            if (isset($options['default'])) {
+            if(isset($options['default']))
+            {
                 $this->hasDefaultValues = true;
             }
         }

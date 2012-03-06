@@ -34,6 +34,7 @@
                 "baseClassesDirectory" => "base"
             );
 
+            Doctrine_Manager::getInstance()->connection()->setAttribute(Aerial_Core::ATTR_YAML_MAINTAIN_COLUMN_NAMES, true);
             Doctrine_Manager::getInstance()->connection()->setAttribute(Doctrine_Core::ATTR_QUOTE_IDENTIFIER, true);
             $definitions = Aerial_Core::generateDefinitionsFromDb($options);
             Doctrine_Manager::getInstance()->connection()->setAttribute(Doctrine_Core::ATTR_QUOTE_IDENTIFIER, false);
@@ -46,6 +47,12 @@
             return true;
         }
 
+        /**
+         * @route               /codegen/models
+         * @routeMethods        GET
+         *
+         * @return bool
+         */
         public function generateModelsFromYAML()
         {
             $yamlPath = Configuration::get("CONFIG_PATH")."/schema.yml";
@@ -58,7 +65,6 @@
             Aerial_Core::generateModelsFromYaml($yamlPath, Configuration::get("PHP_MODELS"), $options);
             return true;
         }
-
 
         public function getAS3Type($type, $unsigned)
         {
