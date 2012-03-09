@@ -90,20 +90,8 @@
         public function router($callable, $route, $params)
         {
             $app = $this->getApp();
-            $env = $app->environment();
 
-            $data = array();
-
-            if(in_array("PUT", $route->getHttpMethods()) || in_array("POST", $route->getHttpMethods()))
-                $data = array($app->request()->getBody());
-            else
-                $data = $params;
-
-            if(!empty($env["QUERY_STRING"]))
-            {
-                parse_str($env["QUERY_STRING"], $query);
-                $data = array_merge($data, $query);
-            }
+            $data = $this->getRequestData($route, $params);
 
             if(!is_callable($callable))
                 return false;
@@ -241,6 +229,29 @@
                 $rawResponse = $rawResponse->toArray();
 
             $data = Serializer::serialize($rawResponse, $contentType);
+
+            return $data;
+        }
+
+        private function getRequestData(Slim_Route $route, $params)
+        {
+            $app = $this->getApp();
+            $env = $app->environment();
+
+            $data = array();
+            $body = $app->request()->getBody();
+
+            if(!empty($params))
+                $data = array_merge($data, $params);
+
+            if((in_array("PUT", $route->getHttpMethods()) || in_array("POST", $route->getHttpMethods())) && !empty($body))
+                $data = array_merge($data, array($body));
+
+            if(!empty($env["QUERY_STRING"]))
+            {
+                parse_str($env["QUERY_STRING"], $query);
+                $data[] = $query;
+            }
 
             return $data;
         }
