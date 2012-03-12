@@ -1,5 +1,6 @@
 <?php
     require_once(Configuration::get("LIBRARY_PATH") . "/aerialframework/core/Bootstrapper.php");
+    include_once(Configuration::get("LIBRARY_PATH") . "/aerialframework/utils/Utils.php");
 
     class Bootstrap
     {
