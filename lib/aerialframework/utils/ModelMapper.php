@@ -5,6 +5,9 @@
 
 		public static function mapToModel($class, $data, $assignIdentifier=false)
 		{
+            // force array
+            $data = (array) $data;
+
 			if(is_undefined($data))
 				return null;
 			
