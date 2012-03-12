@@ -1,8 +1,8 @@
 <?php
     @session_start();
 
-    require_once dirname(__FILE__)."/slim/Slim/Slim.php";
-    require_once dirname(__FILE__)."/RESTController.php";
+    require_once dirname(__FILE__) . "/slim/Slim/Slim.php";
+    require_once dirname(__FILE__) . "/RESTController.php";
     import("aerialframework.core.AerialConfiguration");
 
     $app = new Slim();
@@ -22,8 +22,11 @@
         return Configuration::get("DEBUG_MODE") === true && in_array("debug", $roles);
     });
 
+    // get and require all PHP services located in the PHP_SERVICES directory
+    $classes = $controller->getAllPHPServices();
+
     // auto-routing must always be declared AFTER authorization callback
-    $controller->addAutoRouting(array(new AerialConfiguration()));
+    $controller->addAutoRouting($classes);
 
     // run Slim!
     $app->run();
