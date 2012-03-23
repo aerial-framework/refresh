@@ -15,6 +15,13 @@
     Configuration::set("LIBRARY_PATH", dirname(__FILE__) . "/../lib");
 
     /**
+     * The path to the Aerial library folder
+     *
+     * @see /projectroot/config
+     */
+    Configuration::set("CONFIG_PATH", dirname(__FILE__));
+
+    /**
      * Debug mode - show debugging messages and data if TRUE
      */
     Configuration::set("DEBUG_MODE", true);
