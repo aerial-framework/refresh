@@ -44,6 +44,7 @@
     Configuration::set("DB_PORT", "3306");
 
     Configuration::set("PHP_MODELS", Configuration::get("WWW_PATH")."/../src_php/models");
+    Configuration::set("PHP_SERVICES", Configuration::get("WWW_PATH")."/../src_php/services");
 
     // check whether LIBRARY PATH is valid, as it will be needed shortly
     if(!realpath(Configuration::get("LIBRARY_PATH")))
