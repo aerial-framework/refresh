@@ -17,6 +17,7 @@
     $classes = getClassesAndInfo();
 
     $config = new Amfphp_Core_Config();
+	$config->checkArgumentCount = false;
     $config->serviceFolderPaths = array(realpath(Configuration::get("PHP_SERVICES")));
     $config->serviceNames2ClassFindInfo = $classes;
     $gateway = Amfphp_Core_HttpRequestGatewayFactory::createGateway($config);

@@ -8,6 +8,12 @@
             // force array
             $data = (array) $data;
 
+			// amfPHP2-specific logic
+			if(isset($data["_externalizedData"]))
+			{
+				$data = (array) $data["_externalizedData"];
+			}
+
 			if(is_undefined($data))
 				return null;
 			
