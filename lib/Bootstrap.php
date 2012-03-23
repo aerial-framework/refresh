@@ -29,4 +29,10 @@
                     break;
             }
         }
+
+        public static function actAsLibrary()
+        {
+            // instantiate the Aerial bootstrapper
+            Bootstrapper::getInstance();
+        }
     }
