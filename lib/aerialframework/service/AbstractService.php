@@ -82,7 +82,7 @@
 			return $object->delete();
 		}
 
-		public function find($criteria, $limit, $offset, $sort, $relations, $hydrateAMF = true)
+		private function find($criteria, $limit, $offset, $sort, $relations, $hydrateAMF = true)
 		{
 			$q = Doctrine_Query::create()->from("$this->modelName r");
 
@@ -145,7 +145,7 @@
 			return $this->table->count();
 		}
 
-		public function query($properties)
+		private function query($properties)
 		{
 			$q = Doctrine_Query::create();
 			foreach ($properties as $property)
