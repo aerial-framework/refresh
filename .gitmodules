@@ -1,0 +1,3 @@
+[submodule "lib/servers/rest/slim-plugins/Plugins/autoroute/phpdbl"]
+	path = lib/servers/rest/slim-plugins/Plugins/autoroute/phpdbl
+	url = git@github.com:dannykopping/PHPDocBlock-lite.git
