@@ -233,10 +233,6 @@
                 {
                     return array("status" => "operational");
                 });
-
-                // add internal Aerial operations
-                require_once Configuration::get("LIBRARY_PATH")."/aerialframework/core/CodeGeneration.php";
-                $this->addAutoRouting(array(new CodeGeneration()));
             }
         }
 
