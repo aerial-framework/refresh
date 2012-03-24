@@ -44,7 +44,7 @@ package org.aerialframework.rpc
 		}
 
 		/*Modify Methods*/
-		public function insert(vo:Object, returnCompleteObject:Boolean = false, mapToModel:Boolean=true):Operation
+		public function insert(vo:Object, returnCompleteObject:Boolean = true, mapToModel:Boolean=true):Operation
 		{
 			validateVO(vo);
 			var op:Operation = new Operation(this, "insert", vo, returnCompleteObject, mapToModel);
@@ -52,7 +52,7 @@ package org.aerialframework.rpc
 			return op;
 		}
 
-		public function update(vo:Object, returnCompleteObject:Boolean = false, mapToModel:Boolean=true):Operation
+		public function update(vo:Object, returnCompleteObject:Boolean = true, mapToModel:Boolean=true):Operation
 		{
 			validateVO(vo);
 			var op:Operation = new Operation(this, "update", vo, returnCompleteObject, mapToModel);
@@ -60,7 +60,7 @@ package org.aerialframework.rpc
 			return op;
 		}
 
-		public function save(vo:Object, returnCompleteObject:Boolean = false, mapToModel:Boolean=true):Operation
+		public function save(vo:Object, returnCompleteObject:Boolean = true, mapToModel:Boolean=true):Operation
 		{
 			validateVO(vo);
 			var op:Operation = new Operation(this, "save", vo, returnCompleteObject, mapToModel);

@@ -25,7 +25,7 @@
          *
          * @return int|Aerial_Record
          */
-        public function save($object, $returnCompleteObject = false, $mapToModel = true)
+        public function save($object, $returnCompleteObject = true, $mapToModel = true)
         {
             if($mapToModel)
                 $object = ModelMapper::mapToModel($this->modelName, $object, true);
@@ -52,7 +52,7 @@
          *
          * @return int|Aerial_Record
          */
-        public function update($object, $returnCompleteObject = false, $mapToModel = true)
+        public function update($object, $returnCompleteObject = true, $mapToModel = true)
         {
             return self::save($object, $returnCompleteObject, $mapToModel);
         }
@@ -66,7 +66,7 @@
          *
          * @return int|Aerial_Record
          */
-        public function insert($object, $returnCompleteObject = false, $mapToModel = true)
+        public function insert($object, $returnCompleteObject = true, $mapToModel = true)
         {
             if($mapToModel)
                 $object = ModelMapper::mapToModel($this->modelName, $object);
