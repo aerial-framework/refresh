@@ -12,12 +12,15 @@
 			if(isset($data["_externalizedData"]))
 			{
 				$data = (array) $data["_externalizedData"];
+				unset($data["_externalizedData"]);
 			}
 
 			if(is_undefined($data))
 				return null;
 			
 			$instance = new $class();
+
+			$data = self::fixData($data);
 
 			// Since we're instantiating a new model and then mapping the values, we need to clear out default column values.
 			// Otherwise, Doctrine will assign the default values to "_oldValues" before we finish mapping.
@@ -42,7 +45,9 @@
 						unset($data[$key]);
 
 						if($value !== null)
+						{
 							$instance->assignIdentifier($value);
+						}
 					}				
 			}
 
@@ -66,12 +71,12 @@
 						$instance->$key = $value;
 						continue;
 					}
-	
+
 					$found = false;
 					foreach($relations as $relation)
 						if($key == $relation->getAlias())
 							$found = true;
-	
+
 					if(!$found)				// is a normal property, not a relation
 					{
 						$columnName = $instance->getTable()->getColumnName($key);
@@ -81,13 +86,13 @@
 						switch($definition["type"])
 						{
 							case "blob":
-								if($value instanceof ByteArray)
+								if($value instanceof Amfphp_Core_Amf_Types_ByteArray)
 									$value = $value->data;
 								break;
 						}
-						
+
 						$instance->$key = $value;
-					}					
+					}
 				}
 
 			if(is_array($relations) || is_object($relations))
@@ -95,7 +100,7 @@
 				{
 					$alias = $relation->getAlias();
 					
-					if(!is_undefined($data[$alias]) && $data[$alias] != null)
+					if(isset($data[$alias]) && !is_undefined($data[$alias]) && $data[$alias] != null)
 					{
 						$relClass = $relation->getClass();
 						$parentRel = self::hasParentRelationOfType(new $relClass, $class);
@@ -105,7 +110,6 @@
 							//echo "Many: $alias\n";
 							$collection = new Doctrine_Collection($relation->getClass());
 
-							//print_r($data[$alias]);
 							if($data[$alias] instanceof Aerial_ArrayCollection)
 							{
 								foreach($data[$alias]->source as $element)
@@ -144,6 +148,30 @@
 				}
 
 			return self::checkLookup($instance);
+		}
+
+		private static function fixData($data)
+		{
+			foreach($data as $key => &$value)
+			{
+				// amfPHP2-specific logic
+				if(is_array($value) && isset($value["_externalizedData"]))
+				{
+					$value = (array) $value["_externalizedData"];
+					unset($value["_externalizedData"]);
+				}
+
+				if(is_object($value) && isset($value->_externalizedData))
+				{
+					$value = (array) $value->_externalizedData;
+					unset($value->_externalizedData);
+				}
+
+				if(is_array($value))
+					$value = self::fixData($value);
+			}
+
+			return $data;
 		}
 		
 		private static function hasParentRelationOfType($instance, $class)
