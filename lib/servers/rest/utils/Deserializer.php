@@ -48,6 +48,8 @@
                 $result = call_user_func(array($deserializer, "parse"), $data);
                 if(!empty($result))
                     return $result;
+
+				throw new Exception("An error occurred while attempting to deserialize data");
             }
             else
                 throw new Exception("Cannot find deserializer type \"" . $deserializer . "\"");
