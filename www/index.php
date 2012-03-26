@@ -4,6 +4,6 @@
     require_once("../config/config.php");
 
     // load the Bootstrap file
-    require_once("../lib/Bootstrap.php");
+    require_once(Configuration::get("LIBRARY_PATH")."/Bootstrap.php");
 
     Bootstrap::actAsServer();
