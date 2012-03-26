@@ -1,3 +1,6 @@
 [submodule "lib/servers/rest/slim-plugins/Plugins/autoroute/phpdbl"]
 	path = lib/servers/rest/slim-plugins/Plugins/autoroute/phpdbl
 	url = git@github.com:dannykopping/PHPDocBlock-lite.git
+[submodule "lib/servers/amfphp2"]
+	path = lib/servers/amfphp2
+	url = git@github.com:aerial-framework/amfphp-2.0.git
