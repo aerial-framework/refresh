@@ -1,12 +1,7 @@
 <?php
 
-    import('doctrine.Doctrine');
-    import('aerialframework.doctrine-extensions.Aerial');
-    import('aerialframework.utils.ModelMapper');
-    import('aerialframework.utils.Date');
-    import('aerialframework.utils.firephp.fb');
-
-    import('aerialframework.exceptions.Aerial_Exception');
+    require_once(Configuration::get("LIBRARY_PATH")."/doctrine/Doctrine.php");
+    require_once(Configuration::get("LIBRARY_PATH")."/aerialframework/util/firephp/fb.php");
 
     class Bootstrapper
     {
