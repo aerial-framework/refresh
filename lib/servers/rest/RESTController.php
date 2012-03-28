@@ -96,7 +96,7 @@
             if(!is_callable($callable))
                 return false;
 
-            $result = call_user_func_array($callable, $data);
+            $result = call_user_func_array($callable, array($data));
 
             // if there is no response data, return a blank response
             if($result === null && $result !== false)
@@ -264,8 +264,15 @@
             return $data;
         }
 
+		/**
+		 * @param Slim_Route $route
+		 * @param $params
+		 * @return Request
+		 */
         private function getRequestData(Slim_Route $route, $params)
         {
+			$req = new Request();
+
             $app = $this->getApp();
             $env = $app->environment();
 
@@ -273,17 +280,17 @@
             $body = $app->request()->getBody();
 
             if(!empty($params))
-                $data = array_merge($data, $params);
+                $req->params = $params;
 
             if((in_array("PUT", $route->getHttpMethods()) || in_array("POST", $route->getHttpMethods())) && !empty($body))
-                $data = array_merge($data, array($body));
+				$req->data = $body;
 
             if(!empty($env["QUERY_STRING"]))
             {
                 parse_str($env["QUERY_STRING"], $query);
-                $data[] = $query;
+                $req->queryParams = $query;
             }
 
-            return $data;
+            return $req;
         }
     }
