@@ -43,18 +43,18 @@
     Configuration::set("DB_PASSWORD", "");
     Configuration::set("DB_PORT", "3306");
 
-    Configuration::set("PHP_MODELS", Configuration::get("WWW_PATH")."/../src_php/models");
-    Configuration::set("PHP_SERVICES", Configuration::get("WWW_PATH")."/../src_php/services");
+    Configuration::set("PHP_MODELS", Configuration::get("WWW_PATH")."/../src_php/org/aerialframework/vo");
+    Configuration::set("PHP_SERVICES", Configuration::get("WWW_PATH")."/../src_php/org/aerialframework/service");
 
     // check whether LIBRARY PATH is valid, as it will be needed shortly
     if(!realpath(Configuration::get("LIBRARY_PATH")))
         throw new Exception("Library path not valid: ".Configuration::get("LIBRARY_PATH"));
 
-    function import($classPath)
-    {
-    	$importFile = str_replace(".", DIRECTORY_SEPARATOR, $classPath) . ".php";
-    	require_once(Configuration::get("LIBRARY_PATH") . DIRECTORY_SEPARATOR . $importFile);
-    }
+	include_once dirname(__FILE__)."/require.php";
+
+	Configuration::set("COLLECTION_CLASS", "flex.messaging.io.ArrayCollection");
+	Configuration::set("DOCTRINE_DEFAULT_HYDRATION", Doctrine_Core::HYDRATE_RECORD);
+
 
     class Configuration
     {

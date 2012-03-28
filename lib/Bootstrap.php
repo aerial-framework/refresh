@@ -1,19 +1,19 @@
 <?php
 	class Bootstrap
 	{
-		public function __construct()
+		private static $initialized;
+
+		private static function init()
 		{
-			if (!function_exists("is_undefined"))
-			{
-				function is_undefined($obj)
-				{
-					return is_object($obj) ? get_class($obj) == "Amfphp_Core_Amf_Types_Undefined" : false;
-				}
-			}
+			self::$initialized = true;
+
+			self::addGlobalFunctions();
 		}
 
 		public static function actAsServer($override = null)
 		{
+			self::init();
+
 			// instantiate the Aerial bootstrapper
 			Bootstrapper::getInstance();
 
@@ -39,7 +39,20 @@
 
 		public static function actAsLibrary()
 		{
+			self::init();
+
 			// instantiate the Aerial bootstrapper
 			Bootstrapper::getInstance();
+		}
+
+		private static function addGlobalFunctions()
+		{
+			if (!function_exists("is_undefined"))
+			{
+				function is_undefined($obj)
+				{
+					return is_object($obj) ? get_class($obj) == "Amfphp_Core_Amf_Types_Undefined" : false;
+				}
+			}
 		}
 	}
