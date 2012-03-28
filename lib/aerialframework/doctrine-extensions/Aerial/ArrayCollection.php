@@ -7,7 +7,7 @@ class Aerial_ArrayCollection implements ArrayAccess, Countable
 
 	function Aerial_ArrayCollection($component = null)
 	{
-		$this->_explicitType = ConfigXml::getInstance()->collectionClass;
+		$this->_explicitType = Configuration::get("COLLECTION_CLASS");
 	}
 	
 	//ArrayAccess Implementation

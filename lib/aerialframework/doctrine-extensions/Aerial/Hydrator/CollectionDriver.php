@@ -27,7 +27,7 @@ class Aerial_Hydrator_CollectionDriver  extends Doctrine_Hydrator_Graph
 			switch($definition["type"])
 			{
 				case "blob":
-						$value = new ByteArray($value);						
+						$value = new Amfphp_Core_Amf_Types_ByteArray($value);
 					break;
 				case "date":
 				case "datetime":
