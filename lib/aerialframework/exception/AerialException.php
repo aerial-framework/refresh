@@ -1,5 +1,5 @@
 <?php 
-    class Aerial_Exception extends Exception
+    class AerialException extends Exception
     {
         const CONNECTION = "Error connecting to database";
 		const SERVER_UNRESPONSIVE = "The server you're attempting to connect to is unresponsive";
