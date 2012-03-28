@@ -6,11 +6,6 @@
     import('aerialframework.utils.Date');
     import('aerialframework.utils.firephp.fb');
 
-    import('aerialframework.encryption.Encrypted');
-    import('aerialframework.encryption.Encryption');
-    import('aerialframework.encryption.rc4crypt');
-
-    import('aerialframework.exceptions.Aerial_Encryption_Exception');
     import('aerialframework.exceptions.Aerial_Exception');
 
     class Bootstrapper

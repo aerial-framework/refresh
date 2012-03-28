@@ -3,7 +3,6 @@
 
     require_once dirname(__FILE__) . "/slim/Slim/Slim.php";
     require_once dirname(__FILE__) . "/RESTController.php";
-    import("aerialframework.core.AerialConfiguration");
 
     $app = new Slim();
 
