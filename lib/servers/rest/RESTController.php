@@ -47,6 +47,9 @@
 
             // add default Aerial operations
             $this->addDefaultOperations();
+
+			// add internal test service for auto-routing
+			$this->addAutoRouting(array(new InternalTestService()));
         }
 
         /**
@@ -294,3 +297,15 @@
             return $req;
         }
     }
+
+	class InternalTestService
+	{
+		/**
+		 * @route				/internal/test/simple
+		 * @routeMethods		GET
+		 */
+		public function simple()
+		{
+			return json_encode(array("message" => "Hello World"));
+		}
+	}
