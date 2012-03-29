@@ -1,0 +1,4 @@
+default:
+  context:
+    parameters:
+      baseURL: http://localhost/play/aerial/refresh/www
